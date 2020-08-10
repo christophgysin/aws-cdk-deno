@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as cdk from '@aws-cdk/core';
 import { bundle } from './bundling';
@@ -7,7 +8,7 @@ import { bundle } from './bundling';
  */
 export interface DenoFunctionProps extends lambda.FunctionOptions {
   /**
-   * Path to the entry file (JavaScript or TypeScript).
+   * Path to the entry directory (must contain index.ts).
    */
   readonly entry: string;
 
@@ -17,6 +18,11 @@ export interface DenoFunctionProps extends lambda.FunctionOptions {
    * @default handler
    */
   readonly handler?: string;
+
+  /**
+   * A list of Lambda layers
+   */
+  readonly layers?: lambda.LayerVersion[];
 }
 
 export default class DenoFunction extends lambda.Function {
@@ -25,12 +31,19 @@ export default class DenoFunction extends lambda.Function {
     // Entry and defaults
     const entry = props.entry;
     const handler = props.handler ?? 'handler';
+    const layers = props.layers ?? [
+      new lambda.LayerVersion(scope, 'DenoLayer', {
+        code: lambda.Code.fromAsset(path.join(__dirname, '../src/layer')),
+        compatibleRuntimes: [lambda.Runtime.PROVIDED],
+      }),
+    ];
 
     super(scope, id, {
       ...props,
       runtime: lambda.Runtime.PROVIDED,
+      layers,
       code: bundle({
-        entry,
+        ...props,
       }),
       handler: `index.${handler}`,
     });

@@ -8,16 +8,10 @@ export class AwsCdkDenoStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const denoLayer = new lambda.LayerVersion(this, 'DenoLayer', {
-      code: lambda.Code.fromAsset(path.join(__dirname, '../src/layer')),
-      compatibleRuntimes: [lambda.Runtime.PROVIDED],
-    });
-
     const api = new apigwv2.HttpApi(this, 'HttpApi', {
       defaultIntegration: new apigwv2.LambdaProxyIntegration({
         handler:  new DenoFunction(this, 'deno', {
           entry: path.join(__dirname, '../src/lambda'),
-          layers: [denoLayer],
         }),
       }),
     });

@@ -13,5 +13,5 @@ Provides:
   $ unzip ../../deno-lambda-layer.zip
 
 ## TODO
-- move layer to lambda-deno using similar approach as SingletonLambda
+- Create Lambda Layer as Singleton
 - aws-sdk for deno

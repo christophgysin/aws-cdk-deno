@@ -23,7 +23,6 @@ export function bundle(options: BundlingOptions): lambda.AssetCode {
   return lambda.Code.fromAsset(options.entry, {
     bundling: {
       image: defaultBundlingImage,
-      // TODO: cache? --reload?
       command: ['bundle', input, '/asset-output/index.js'],
       volumes: [
         { containerPath: '/deno-dir', hostPath: path.join(os.homedir(), '.cache/deno') },
