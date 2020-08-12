@@ -7,7 +7,7 @@ Provides:
 
 ## Setup
 
-    $ wget https://github.com/hayd/deno-lambda/releases/download/1.2.2/deno-lambda-layer.zip
+    $ wget https://github.com/hayd/deno-lambda/releases/download/1.2.3/deno-lambda-layer.zip
     $ mkdir src/layer
     $ cd src/layer
     $ unzip ../../deno-lambda-layer.zip
